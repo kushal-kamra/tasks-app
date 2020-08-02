@@ -1,5 +1,6 @@
 const VALID_KEYS_PATH = __dirname + '/valid-keys.txt';
 const fs = require('fs');
+const os = require('os'); 
 const shortid = require('shortid');
 // To generate a unique API KEY, use shortid.generate()
 const LINE_ENDING = require('os').EOL;
@@ -13,17 +14,21 @@ function createUUID() {
 
 module.exports = function (req, res) {
 
-    let apikey = createUUID;
+    console.log('Inside Key Store');
 
-    fs.writeFile('valid-keys.txt', apikey, function (err) {
+    let apikey = createUUID();
+
+    console.log(apikey);
+
+    fs.writeFile('valid-keys.txt', apikey, {'flag':'a'}, function (err) {
         if (err) return console.log(err);
     });
-    fs.writeFile('valid-keys.txt', os.EOL, function (err) {
+    fs.writeFile('valid-keys.txt', os.EOL, {'flag':'a'}, function (err) {
         if (err) return console.log(err);
     })
 
     res.status(201).send({
-        "apiKey": apiKey
+        "apiKey": apikey
     });
 };
 
